@@ -1,0 +1,303 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+    --bg-color: #fdfcf8;
+    --text-color: #2c3e50;
+    --accent-color: #c5a059;
+    --secondary-color: #8e8d8a;
+    --card-bg: #ffffff;
+    --border-color: #e5e0d8;
+    --transition: all 0.3s ease;
+    --border-radius: 8px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.04);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    height: 100vh; /* Full screen height */
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    background-color: #000;
+}
+
+.hero-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Fill the whole screen */
+    object-position: center;
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.7));
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    padding: 2rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+
+.hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+header {
+    text-align: center;
+    margin: 3rem 0;
+}
+
+.logo {
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    letter-spacing: 1px;
+}
+
+/* Sections */
+section {
+    display: none;
+    animation: fadeIn 0.5s ease forwards;
+}
+
+section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Forms */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+label {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    color: var(--secondary-color);
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    background: var(--card-bg);
+    font-family: inherit;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: var(--transition);
+}
+
+input:focus {
+    border-color: var(--accent-color);
+}
+
+.btn {
+    width: 100%;
+    padding: 1.2rem;
+    background-color: var(--text-color);
+    color: #fff;
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn:hover {
+    background-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(197, 160, 89, 0.3);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    box-shadow: none;
+}
+.btn-secondary:hover {
+    background-color: var(--border-color);
+    color: var(--text-color);
+    box-shadow: none;
+}
+
+/* Catalog */
+.service-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.service-card:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.02);
+}
+
+.service-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+}
+
+.service-meta {
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+}
+
+.service-price {
+    font-weight: 600;
+    color: var(--accent-color);
+}
+
+/* Time Grid */
+.time-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.time-slot {
+    padding: 1rem 0.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    background: white;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    border-radius: var(--border-radius);
+}
+
+.time-slot .time-val {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.time-slot .availability-label {
+    font-size: 0.7rem;
+    color: var(--secondary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.time-slot.selected {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.time-slot.selected .availability-label {
+    color: rgba(255,255,255,0.8);
+}
+
+.time-slot.disabled {
+    background: #f5f5f5;
+    color: #ccc;
+    cursor: not-allowed;
+    border-color: #eee;
+}
+
+.time-slot.disabled .availability-label {
+    color: #bbb;
+}
+
+/* Success */
+.success-icon {
+    font-size: 4rem;
+    color: var(--accent-color);
+    margin-bottom: 1.5rem;
+}
+
+.confirmation-card {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+/* Print Styles for Reports */
+@media print {
+    body { background: white; color: black; }
+    header button, .filter-section button, #print-btn, .kanban-controls, .kanban-board-wrapper, .kanban-board, .block-slots-section, #blocked-list { display: none !important; }
+    .container { padding: 0; margin: 0; max-width: 100%; }
+    .filter-section { border: none; padding: 0; margin-bottom: 2rem; justify-content: flex-start; }
+    .filter-section input { border: none; font-weight: bold; font-size: 1.2rem; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .stat-card { border: 1px solid #ccc; break-inside: avoid; }
+    .category-card { border-left: 3px solid #ccc; break-inside: avoid; }
+    .logo { color: black; }
+    h3 { page-break-after: avoid; }
+}

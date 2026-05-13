@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Admin - Los Pinos Spa</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 400px; justify-content: center;">
+        <header>
+            <div class="logo">Admin Access</div>
+            <div class="subtitle">Los Pinos Resort & Spa</div>
+        </header>
+
+        <div class="form-group">
+            <label>Contraseña de Acceso</label>
+            <input type="password" id="admin-pass" placeholder="••••••••">
+        </div>
+        <div id="login-error" style="color: #d9534f; font-size: 0.8rem; margin-bottom: 1rem; display: none;">Contraseña incorrecta.</div>
+        <button class="btn" onclick="checkLogin()">Entrar al Dashboard</button>
+        <button class="btn btn-secondary" onclick="window.location.href='index.html'">Volver a Reservas</button>
+    </div>
+
+    <script>
+        function checkLogin() {
+            const pass = document.getElementById('admin-pass').value;
+            // Clave de ejemplo: 'spa2026'
+            if (pass === 'spa2026') {
+                localStorage.setItem('admin_logged_in', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>

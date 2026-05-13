@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Los Pinos Resort & Spa - Reservas</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-overlay"></div>
+        <video autoplay muted loop playsinline class="hero-video">
+            <source src="assets/hero-video.mp4" type="video/mp4">
+        </video>
+        <div class="hero-content">
+            <h1>Bienvenido al Paraíso</h1>
+            <p>Descubra la experiencia termal definitiva en Los Pinos Resort & Spa.</p>
+            <button class="btn" style="width: auto; padding: 1rem 2rem; margin-top: 2rem;" onclick="document.querySelector('.container').scrollIntoView({behavior: 'smooth'})">Reservar Experiencia</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <header style="display: flex; flex-direction: column; align-items: center; gap: 2rem; margin-bottom: 4rem;">
+            <img src="assets/logo-tremun.jpg" alt="Tremun Hoteles" style="height: 100px; width: auto; opacity: 1;">
+            <img src="assets/logo-lospinos.png" alt="Los Pinos Resort & Spa" style="height: 80px; width: auto;">
+        </header>
+
+        <!-- Step 1: Identification -->
+        <section id="step-identity" class="active">
+            <h2>Bienvenido</h2>
+            <p style="margin-bottom: 2rem; color: var(--secondary-color);">Por favor, identifíquese para continuar con su reserva.</p>
+            <div class="form-group">
+                <label>Número de Habitación</label>
+                <input type="text" id="room-number" placeholder="Ej: 204">
+            </div>
+            <div class="form-group">
+                <label>Apellido</label>
+                <input type="text" id="last-name" placeholder="Ej: Volpintesta">
+            </div>
+            <button class="btn" onclick="goToCatalog()">Continuar</button>
+        </section>
+
+        <!-- Step 2: Catalog -->
+        <section id="step-catalog">
+            <h2>Nuestros Servicios</h2>
+            <div id="services-container" style="margin-top: 1.5rem;">
+                <!-- Services will be loaded here -->
+            </div>
+            <button class="btn btn-secondary" onclick="showSection('step-identity')">Volver</button>
+        </section>
+
+        <!-- Step 3: Scheduling -->
+        <section id="step-schedule">
+            <h2 id="selected-service-name">Programar Turno</h2>
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label>Seleccione Fecha</label>
+                <input type="date" id="booking-date">
+            </div>
+            <label>Horarios Disponibles</label>
+            <div class="time-grid" id="time-grid">
+                <!-- Time slots will be generated here -->
+            </div>
+            <div id="validation-msg" style="margin-top: 1rem; color: #d9534f; font-size: 0.9rem;"></div>
+            <button class="btn" id="confirm-btn" onclick="confirmBooking()">Confirmar Reserva</button>
+            <button class="btn btn-secondary" onclick="showSection('step-catalog')">Volver</button>
+        </section>
+
+        <!-- Step 4: Confirmation -->
+        <section id="step-confirmation">
+            <div class="confirmation-card">
+                <div class="success-icon">✓</div>
+                <h2>Reserva Confirmada</h2>
+                <div id="confirmation-details" style="margin-top: 1.5rem; text-align: left; background: #fff; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 4px;"></div>
+                
+                <button class="btn" onclick="downloadPDF()">Descargar Comprobante PDF</button>
+                <button class="btn btn-secondary" onclick="location.reload()">Finalizar</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="js/validator.js"></script>
+    <script>
+        let servicesData = null;
+        let selectedService = null;
+        let selectedTime = null;
+        let guestInfo = {};
+        let currentBookings = [];
+        let blockedSlots = [];
+
+        // Request notification permission on load
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        // Load services
+        fetch('data/services.json')
+            .then(r => r.json())
+            .then(data => {
+                servicesData = data;
+                renderCatalog();
+            });
+
+        // Pre-load bookings and blocked slots for availability
+        async function fetchBookings() {
+            const [bookingsRes, blockedRes] = await Promise.all([
+                fetch('/api/bookings'),
+                fetch('/api/blocked')
+            ]);
+            currentBookings = await bookingsRes.json();
+            blockedSlots = await blockedRes.json();
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function goToCatalog() {
+            const room = document.getElementById('room-number').value;
+            const name = document.getElementById('last-name').value;
+            if (!room || !name) return alert('Por favor complete sus datos.');
+            guestInfo = { room, name };
+            showSection('step-catalog');
+        }
+
+        function renderCatalog() {
+            const container = document.getElementById('services-container');
+            container.innerHTML = ''; // Clear previous
+            servicesData.categories.forEach(cat => {
+                const h3 = document.createElement('h3');
+                h3.textContent = cat.name;
+                h3.style.margin = "2rem 0 1rem 0";
+                h3.style.fontSize = "0.9rem";
+                h3.style.textTransform = "uppercase";
+                h3.style.color = "var(--accent-color)";
+                container.appendChild(h3);
+
+                cat.services.forEach(s => {
+                    const card = document.createElement('div');
+                    card.className = 'service-card';
+                    card.onclick = () => selectService(s);
+                    card.innerHTML = `
+                        <div class="service-info">
+                            <h3>${s.name}</h3>
+                            <div class="service-meta">${s.duration}${s.description ? '<br><small style="color:var(--secondary-color);font-size:0.7rem;line-height:1.4;display:block;margin-top:0.3rem;">' + s.description + '</small>' : ''}</div>
+                        </div>
+                        <div class="service-price">$${s.price.toLocaleString()}</div>
+                    `;
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        async function selectService(service) {
+            selectedService = service;
+            document.getElementById('selected-service-name').textContent = service.name;
+            await fetchBookings();
+            showSection('step-schedule');
+            generateTimeSlots();
+        }
+
+        function generateTimeSlots() {
+            const grid = document.getElementById('time-grid');
+            grid.innerHTML = '';
+            const date = document.getElementById('booking-date').value;
+            
+            // Hourly slots: 09:00-12:00 morning, 16:30-19:30 afternoon
+            const slots = [
+                '09:00', '10:00', '11:00', '12:00',
+                '16:30', '17:30', '18:30', '19:30'
+            ];
+
+            slots.forEach(time => {
+                const div = document.createElement('div');
+                div.className = 'time-slot';
+                
+                const duration = selectedService.durationMin || parseInt(selectedService.duration) || 45;
+                const validation = validateBooking(date, time, duration, currentBookings, blockedSlots);
+                
+                const isOccupied = !validation.available;
+                const isBlocked = blockedSlots.some(b => b.date === date && b.time === time);
+                const label = isBlocked ? 'Bloqueado' : (isOccupied ? 'Ocupado' : '1 disponible');
+                
+                if (isOccupied || isBlocked) {
+                    div.classList.add('disabled');
+                } else {
+                    div.onclick = () => {
+                        document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('selected'));
+                        div.classList.add('selected');
+                        selectedTime = time;
+                    };
+                }
+                
+                div.innerHTML = `
+                    <span class="time-val">${time} hs</span>
+                    <span class="availability-label">${label}</span>
+                `;
+                grid.appendChild(div);
+            });
+        }
+
+        // Re-generate slots when date changes
+        document.getElementById('booking-date').addEventListener('change', generateTimeSlots);
+
+        async function confirmBooking() {
+            const date = document.getElementById('booking-date').value;
+            if (!date || !selectedTime) return alert('Seleccione fecha y hora.');
+
+            // Final validation
+            const validation = validateBooking(date, selectedTime, selectedService.durationMin || parseInt(selectedService.duration) || 45, currentBookings, blockedSlots);
+
+            if (!validation.available) {
+                document.getElementById('validation-msg').textContent = validation.message;
+                return;
+            }
+
+            const bookingData = {
+                guest_name: guestInfo.name,
+                room_number: guestInfo.room,
+                service_id: selectedService.id,
+                date: date,
+                start_time: selectedTime,
+                duration: parseInt(selectedService.duration)
+            };
+
+            try {
+                const response = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookingData)
+                });
+
+                if (response.ok) {
+                    document.getElementById('validation-msg').textContent = '';
+                    let packageNote = '';
+                    if (selectedService.duration.includes('Sesiones') || selectedService.duration.includes('días')) {
+                        packageNote = '<br><br><strong style="color: var(--accent-color);">Importante:</strong> Su reserva corresponde a la primera sesión del paquete. El resto de las sesiones se coordinarán directamente en la recepción del Spa.';
+                    }
+
+                    const details = `
+                        <strong>Servicio:</strong> ${selectedService.name}<br>
+                        <strong>Fecha:</strong> ${date}<br>
+                        <strong>Hora:</strong> ${selectedTime} hs<br>
+                        <strong>Habitación:</strong> ${guestInfo.room}<br>
+                        <strong>Pasajero:</strong> ${guestInfo.name}<br><br>
+                        <span style="color: var(--accent-color); font-size: 0.8rem;">* Cancelación sin cargo hasta 1 hora antes.</span>
+                        ${packageNote}
+                    `;
+                    document.getElementById('confirmation-details').innerHTML = details;
+                    showSection('step-confirmation');
+
+                    // Browser notification
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        new Notification('🌿 Nueva Reserva Confirmada', {
+                            body: `${guestInfo.name} — Hab. ${guestInfo.room}\n${selectedService.name} · ${date} ${selectedTime} hs`,
+                            icon: 'assets/logo-lospinos.png'
+                        });
+                    }
+                } else {
+                    alert('Error al procesar la reserva.');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Error de conexión.');
+            }
+        }
+
+        async function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const getBase64 = async (url) => {
+                const response = await fetch(url);
+                const blob = await response.blob();
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(blob);
+                });
+            };
+
+            try {
+                const logoTremun = await getBase64('assets/logo-tremun.jpg');
+                const logoPinos = await getBase64('assets/logo-lospinos.png');
+                doc.addImage(logoTremun, 'JPEG', 20, 15, 45, 15);
+                doc.addImage(logoPinos, 'PNG', 155, 15, 35, 15);
+            } catch(e) {
+                console.error('Error loading logos for PDF', e);
+            }
+            
+            doc.setFont("playfair", "bold");
+            doc.setFontSize(22);
+            doc.setTextColor(197, 160, 89); // Accent gold
+            doc.text("Los Pinos Resort & Spa", 105, 45, { align: "center" });
+            
+            doc.setFont("inter", "normal");
+            doc.setFontSize(14);
+            doc.setTextColor(44, 62, 80);
+            doc.text("Confirmación de Reserva", 105, 55, { align: "center" });
+            
+            // Box for details
+            doc.setDrawColor(197, 160, 89);
+            doc.setLineWidth(0.5);
+            doc.roundedRect(20, 65, 170, 80, 3, 3);
+            
+            doc.setFontSize(12);
+            let y = 78;
+            const items = [
+                ["Servicio", selectedService.name],
+                ["Fecha", document.getElementById('booking-date').value],
+                ["Hora", selectedTime + " hs"],
+                ["Habitación", guestInfo.room],
+                ["Huésped", guestInfo.name],
+                ["Precio", "$" + selectedService.price.toLocaleString()]
+            ];
+            
+            items.forEach(item => {
+                doc.setFont("inter", "bold");
+                doc.setTextColor(100, 100, 100);
+                doc.text(item[0] + ":", 30, y);
+                doc.setFont("inter", "normal");
+                doc.setTextColor(40, 40, 40);
+                doc.text(item[1], 70, y);
+                y += 11;
+            });
+            
+            doc.setFontSize(9);
+            doc.setTextColor(142, 141, 138);
+            doc.text("Política de Cancelación: Sin cargo hasta 1 hora antes del turno.", 105, 160, { align: "center" });
+            
+            if (selectedService.duration.includes('Sesiones') || selectedService.duration.includes('días')) {
+                doc.setFont("inter", "bold");
+                doc.setTextColor(197, 160, 89);
+                doc.text("* Importante: Al ser un paquete, esta reserva es para la 1ra sesión.", 105, 168, { align: "center" });
+                doc.text("Las sesiones restantes se coordinarán en la recepción del Spa.", 105, 174, { align: "center" });
+            }
+            
+            doc.save(`Reserva_${guestInfo.name}_${selectedTime}.pdf`);
+        }
+
+        // Set default date to tomorrow
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('booking-date').value = tomorrow.toISOString().split('T')[0];
+    </script>
+</body>
+</html>

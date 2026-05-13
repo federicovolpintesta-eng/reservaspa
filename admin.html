@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Los Pinos Spa</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // Security Check
+        if (localStorage.getItem('admin_logged_in') !== 'true') {
+            window.location.href = 'login.html';
+        }
+        function logout() {
+            localStorage.removeItem('admin_logged_in');
+            window.location.href = 'login.html';
+        }
+    </script>
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin-top: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem 1rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 130px;
+            transition: var(--transition);
+        }
+        .stat-card:hover {
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(197, 160, 89, 0.05);
+        }
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+            white-space: normal;
+            word-break: normal;
+        }
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+        .filter-section {
+            margin-top: 2rem;
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            background: white;
+            padding: 1.2rem;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .category-card {
+            background: #fff;
+            padding: 1.2rem;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            border-left: 3px solid var(--accent-color);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2.5rem;
+            background: white;
+            border: 1px solid var(--border-color);
+        }
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.85rem;
+        }
+        th {
+            background: #f9f8f5;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--secondary-color);
+        }
+        h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        /* Kanban CSS */
+        .kanban-controls { margin-top: 3rem; display: flex; justify-content: space-between; align-items: center; }
+        .kanban-board-wrapper {
+            margin-top: 1rem;
+            overflow-x: auto;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            background: var(--border-color);
+        }
+        .kanban-board {
+            display: grid;
+            grid-template-columns: 80px repeat(7, minmax(150px, 1fr));
+            gap: 1px;
+            min-width: 1200px;
+        }
+        .kanban-header { background: #f9f8f5; padding: 0.8rem; text-align: center; font-size: 0.8rem; font-weight: bold; color: var(--secondary-color); }
+        .kanban-time-label { background: #fff; padding: 0.8rem; text-align: center; font-size: 0.8rem; font-weight: bold; color: var(--text-color); display: flex; align-items: center; justify-content: center;}
+        .kanban-cell { background: #fff; min-height: 80px; padding: 0.5rem; transition: background 0.2s; border-radius: 2px; }
+        .kanban-cell.drag-over { background: #f0f7f4; border: 2px dashed var(--accent-color); }
+        .booking-card {
+            background: var(--accent-color);
+            color: #fff;
+            padding: 0.5rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            cursor: grab;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .booking-card:active { cursor: grabbing; }
+        .booking-card .card-title { font-weight: bold; margin-bottom: 0.3rem; font-size: 0.8rem;}
+        .booking-card .card-subtitle { font-size: 0.7rem; opacity: 0.9; }
+        .booking-card .card-delete { background: rgba(0,0,0,0.2); border: none; color: white; border-radius: 3px; padding: 2px 5px; cursor: pointer; float: right; margin-top: -3px; margin-right: -3px;}
+    </style>
+</head>
+<body>
+    <div class="container" style="max-width: 1000px;">
+        <header>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="display: flex; align-items: center; gap: 2rem;">
+                    <img src="assets/logo-tremun.jpg" alt="Tremun" style="height: 70px;">
+                    <img src="assets/logo-lospinos.png" alt="Los Pinos" style="height: 60px;">
+                    <div style="margin-left: 1rem; border-left: 1px solid var(--border-color); padding-left: 1.5rem;">
+                        <div class="logo" style="font-size: 1rem; letter-spacing: 2px;">Admin Dashboard</div>
+                        <div class="subtitle">Métricas de Reservas</div>
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1rem; font-size: 0.7rem;" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </header>
+
+        <div class="filter-section">
+            <label style="margin:0">Desde:</label>
+            <input type="date" id="filter-date-start" style="width: auto; padding: 0.5rem; border-radius: var(--border-radius);">
+            <label style="margin:0; margin-left: 0.5rem;">Hasta:</label>
+            <input type="date" id="filter-date-end" style="width: auto; padding: 0.5rem; border-radius: var(--border-radius);">
+            <button class="btn" style="width: auto; padding: 0.5rem 1.5rem; margin: 0; margin-left: 0.5rem; font-size: 0.8rem;" onclick="loadMetrics()">Aplicar</button>
+            <button class="btn btn-secondary" style="width: auto; padding: 0.5rem 1.5rem; margin: 0; font-size: 0.8rem;" onclick="resetFilter()">Ver Todo</button>
+            <button id="print-btn" class="btn btn-secondary" style="width: auto; padding: 0.5rem 1.5rem; margin: 0; margin-left: auto; font-size: 0.8rem; border-color: var(--text-color);" onclick="window.print()">🖨️ Imprimir Reporte</button>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="total-bookings">0</div>
+                <div class="stat-label">Total Reservas</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="occupancy-rate">0%</div>
+                <div class="stat-label">Ocupación Promedio</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="total-revenue">$0</div>
+                <div class="stat-label">Recaudación Total</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="avg-ticket">$0</div>
+                <div class="stat-label">Ticket Promedio</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="popular-service">-</div>
+                <div class="stat-label">Servicio más popular</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="peak-hour">-</div>
+                <div class="stat-label">Horario Pico</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 3rem;">
+            <h3>Ventas por Categoría</h3>
+            <div id="category-stats" class="category-grid">
+                <!-- Category stats will be injected here -->
+            </div>
+        </div>
+
+        <div class="block-slots-section" style="margin-top: 3rem;">
+            <h3>Bloquear Turnos</h3>
+            <div style="background: white; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+                <div class="form-group" style="margin: 0; flex: 1; min-width: 160px;">
+                    <label>Fecha</label>
+                    <input type="date" id="block-date" style="height: 48px; padding: 0 1rem; width: 100%;">
+                </div>
+                <div class="form-group" style="margin: 0; flex: 1; min-width: 140px;">
+                    <label>Horario</label>
+                    <select id="block-time" style="height: 48px; padding: 0 1rem; width: 100%; border-radius: var(--border-radius); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.9rem;">
+                        <option value="09:00">09:00 hs</option>
+                        <option value="10:00">10:00 hs</option>
+                        <option value="11:00">11:00 hs</option>
+                        <option value="12:00">12:00 hs</option>
+                        <option value="16:30">16:30 hs</option>
+                        <option value="17:30">17:30 hs</option>
+                        <option value="18:30">18:30 hs</option>
+                        <option value="19:30">19:30 hs</option>
+                    </select>
+                </div>
+                <button class="btn" style="height: 48px; width: auto; padding: 0 1.5rem; margin: 0; font-size: 0.8rem;" onclick="blockSlot()">Bloquear Turno</button>
+            </div>
+            <div id="blocked-list" style="margin-top: 1rem;"></div>
+        </div>
+
+        <div class="kanban-controls">
+            <h3>Grilla de Reservas (7 Días)</h3>
+            <div>
+                <label style="font-size: 0.8rem; font-weight: bold; color: var(--secondary-color);">Fecha de inicio:</label>
+                <input type="date" id="kanban-start-date" style="padding: 0.5rem; margin-left: 0.5rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-family: inherit;">
+            </div>
+        </div>
+        <div class="kanban-board-wrapper">
+            <div id="kanban-board" class="kanban-board">
+                <!-- Grid will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let lastBookingsCount = 0;
+        let lastBookingsIds = [];
+        
+        // Polling para notificaciones (cada 10 segundos)
+        setInterval(async () => {
+            if (draggedBookingId) return; // Pausar mientras se arrastra
+            try {
+                const res = await fetch('/api/bookings');
+                const data = await res.json();
+                const currentIds = data.map(b => b.booking_id);
+                
+                // Verificar si hay nuevas reservas
+                const newIds = currentIds.filter(id => !lastBookingsIds.includes(id));
+                
+                if (lastBookingsIds.length > 0 && newIds.length > 0) {
+                    const newBookings = data.filter(b => newIds.includes(b.booking_id));
+                    newBookings.forEach(b => {
+                        const msg = `Nueva reserva: ${b.guest_name} - ${b.date} ${b.start_time}`;
+                        if ('Notification' in window && Notification.permission === 'granted') {
+                            new Notification('🌿 Spa: Nueva Reserva', { body: msg, icon: 'assets/logo-lospinos.png' });
+                        }
+                    });
+                    loadMetrics(); // Recargar grilla
+                }
+                
+                lastBookingsIds = currentIds;
+                lastBookingsCount = data.length;
+            } catch (e) {}
+        }, 10000);
+
+        if ('Notification' in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        let draggedBookingId = null;
+        function handleDragStart(e, id) { 
+            draggedBookingId = id; 
+            e.dataTransfer.effectAllowed = 'move'; 
+            e.dataTransfer.setData('text/plain', id); // Requerido en Firefox/Safari
+            setTimeout(() => e.target.style.opacity = '0.5', 0); 
+        }
+        function handleDragEnd(e) { e.target.style.opacity = '1'; }
+        function handleDragOver(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+        function handleDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+        async function handleDrop(e, date, time) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            if (!draggedBookingId) return;
+
+            try {
+                const res = await fetch(`/api/bookings/${draggedBookingId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ date, start_time: time })
+                });
+                if (res.ok) {
+                    loadMetrics();
+                } else {
+                    const error = await res.json();
+                    alert('No se pudo mover: ' + (error.error || 'Error'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Error de red al mover.');
+            }
+            draggedBookingId = null;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('kanban-start-date');
+            if(dateInput) {
+                dateInput.value = new Date().toISOString().split('T')[0];
+                dateInput.addEventListener('change', loadMetrics);
+            }
+        });
+
+        function resetFilter() {
+            document.getElementById('filter-date-start').value = '';
+            document.getElementById('filter-date-end').value = '';
+            loadMetrics();
+        }
+
+        async function deleteBooking(id) {
+            if (!confirm('¿Está seguro de que desea eliminar esta reserva?')) return;
+            try {
+                const res = await fetch(`/api/bookings/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadMetrics();
+                } else {
+                    alert('Error al eliminar la reserva.');
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function blockSlot() {
+            const date = document.getElementById('block-date').value;
+            const time = document.getElementById('block-time').value;
+            if (!date) return alert('Seleccione una fecha.');
+
+            const res = await fetch('/api/blocked', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ date, time })
+            });
+            if (res.ok) loadMetrics();
+        }
+
+        async function unblockSlot(date, time) {
+            const res = await fetch('/api/blocked', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ date, time })
+            });
+            if (res.ok) loadMetrics();
+        }
+
+        async function loadMetrics() {
+            const filterStart = document.getElementById('filter-date-start').value;
+            const filterEnd = document.getElementById('filter-date-end').value;
+            
+            const [servicesRes, bookingsRes, blockedRes] = await Promise.all([
+                fetch('data/services.json'),
+                fetch('/api/bookings'),
+                fetch('/api/blocked')
+            ]);
+            
+            const servicesData = await servicesRes.json();
+            const rawBookings = await bookingsRes.json();
+            const blockedSlots = await blockedRes.json();
+            
+            const bookings = rawBookings.filter(b => {
+                if (!filterStart && !filterEnd) return true;
+                if (filterStart && !filterEnd) return b.date >= filterStart;
+                if (!filterStart && filterEnd) return b.date <= filterEnd;
+                return b.date >= filterStart && b.date <= filterEnd;
+            });
+
+            // Render blocked slots list
+            const blockedList = document.getElementById('blocked-list');
+            blockedList.innerHTML = '';
+            if (blockedSlots.length === 0) {
+                blockedList.innerHTML = '<p style="font-size:0.8rem; color: var(--secondary-color);">No hay turnos bloqueados.</p>';
+            } else {
+                const ul = document.createElement('div');
+                ul.style.display = 'flex';
+                ul.style.flexWrap = 'wrap';
+                ul.style.gap = '0.5rem';
+                blockedSlots.forEach(b => {
+                    const tag = document.createElement('div');
+                    tag.style.cssText = 'background:#fff; border:1px solid #d9534f; padding:0.4rem 0.8rem; font-size:0.75rem; display:flex; gap:0.6rem; align-items:center;';
+                    tag.innerHTML = `<span style="color:#555">${b.date} — ${b.time} hs</span><button onclick="unblockSlot('${b.date}','${b.time}')" style="background:none;border:none;color:#d9534f;cursor:pointer;font-size:0.9rem;padding:0;">✕</button>`;
+                    ul.appendChild(tag);
+                });
+                blockedList.appendChild(ul);
+            }
+
+            const servicesMap = {};
+            const categoryMap = {}; 
+            servicesData.categories.forEach(cat => {
+                cat.services.forEach(s => {
+                    servicesMap[s.id] = s;
+                    categoryMap[s.id] = cat.name;
+                });
+            });
+
+            // Calculate Metrics
+            let revenue = 0;
+            const serviceCounts = {};
+            const hourCounts = {};
+            const categoryRevenue = {};
+            const uniqueRooms = new Set();
+            
+            bookings.forEach(b => {
+                const service = servicesMap[b.service_id] || { name: 'Desconocido', price: 0 };
+                const category = categoryMap[b.service_id] || 'Otros';
+                
+                revenue += service.price;
+                uniqueRooms.add(b.room_number);
+                
+                serviceCounts[service.name] = (serviceCounts[service.name] || 0) + 1;
+                hourCounts[b.start_time] = (hourCounts[b.start_time] || 0) + 1;
+                categoryRevenue[category] = (categoryRevenue[category] || 0) + service.price;
+            });
+
+            // Update UI Stats
+            document.getElementById('total-bookings').textContent = bookings.length;
+            document.getElementById('total-revenue').textContent = '$' + revenue.toLocaleString();
+            const avgTicket = uniqueRooms.size > 0 ? Math.round(revenue / uniqueRooms.size) : 0;
+            document.getElementById('avg-ticket').textContent = '$' + avgTicket.toLocaleString();
+            const mostPopular = Object.entries(serviceCounts).sort((a,b) => b[1] - a[1])[0];
+            document.getElementById('popular-service').textContent = mostPopular ? mostPopular[0] : '-';
+            const peakHour = Object.entries(hourCounts).sort((a,b) => b[1] - a[1])[0];
+            document.getElementById('peak-hour').textContent = peakHour ? peakHour[0] + ' hs' : '-';
+
+            const catContainer = document.getElementById('category-stats');
+            catContainer.innerHTML = '';
+            Object.entries(categoryRevenue).forEach(([cat, rev]) => {
+                const div = document.createElement('div');
+                div.className = 'category-card';
+                div.innerHTML = `<div class="stat-label">${cat}</div><div class="stat-value" style="margin-top:0.5rem; font-size:1.1rem;">$${rev.toLocaleString()}</div>`;
+                catContainer.appendChild(div);
+            });
+
+            let totalDays = 1;
+            if (filterStart && filterEnd) {
+                const s = new Date(filterStart + 'T12:00:00');
+                const e = new Date(filterEnd + 'T12:00:00');
+                totalDays = Math.max(1, Math.ceil((e - s) / (1000 * 60 * 60 * 24)) + 1);
+            } else if (filterStart || filterEnd) {
+                const filteredUniqueDates = [...new Set(bookings.map(b => b.date))].length;
+                totalDays = filteredUniqueDates || 1;
+            } else {
+                totalDays = [...new Set(rawBookings.map(b => b.date))].length || 1;
+            }
+            const totalAvailableSlots = totalDays * 32;
+            const occupancy = Math.round((bookings.length / totalAvailableSlots) * 100);
+            document.getElementById('occupancy-rate').textContent = occupancy ? occupancy + '%' : '0%';
+
+            // --- Render Kanban Grid ---
+            let startDateStr = document.getElementById('kanban-start-date').value;
+            if(!startDateStr) {
+                startDateStr = new Date().toISOString().split('T')[0];
+                document.getElementById('kanban-start-date').value = startDateStr;
+            }
+            const startDateObj = new Date(startDateStr + 'T12:00:00');
+
+            const board = document.getElementById('kanban-board');
+            board.innerHTML = '';
+
+            // Generate 7 days
+            const days = [];
+            for(let i=0; i<7; i++) {
+                const d = new Date(startDateObj);
+                d.setDate(d.getDate() + i);
+                days.push(d.toISOString().split('T')[0]);
+            }
+
+            // Headers
+            const corner = document.createElement('div');
+            corner.className = 'kanban-header';
+            corner.textContent = 'Horario';
+            board.appendChild(corner);
+            
+            days.forEach(d => {
+                const header = document.createElement('div');
+                header.className = 'kanban-header';
+                const parts = d.split('-');
+                header.textContent = `${parts[2]}/${parts[1]}`;
+                board.appendChild(header);
+            });
+
+            const timeSlots = ['09:00', '10:00', '11:00', '12:00', '16:30', '17:30', '18:30', '19:30'];
+            
+            timeSlots.forEach(time => {
+                const tLabel = document.createElement('div');
+                tLabel.className = 'kanban-time-label';
+                tLabel.textContent = time;
+                board.appendChild(tLabel);
+
+                days.forEach(date => {
+                    const cell = document.createElement('div');
+                    cell.className = 'kanban-cell';
+                    cell.ondragover = handleDragOver;
+                    cell.ondragleave = handleDragLeave;
+                    cell.ondrop = (e) => handleDrop(e, date, time);
+
+                    // Find bookings for this date/time
+                    const cellBookings = rawBookings.filter(b => b.date === date && b.start_time === time);
+                    cellBookings.forEach(b => {
+                        const service = servicesMap[b.service_id] || { name: 'Desconocido' };
+                        const card = document.createElement('div');
+                        card.className = 'booking-card';
+                        card.draggable = true;
+                        card.ondragstart = (e) => handleDragStart(e, b.booking_id);
+                        card.ondragend = handleDragEnd;
+                        card.innerHTML = `
+                            <button class="card-delete" onclick="deleteBooking('${b.booking_id}')" title="Eliminar Reserva">✕</button>
+                            <div class="card-title">${service.name}</div>
+                            <div class="card-subtitle">${b.guest_name} (Hab: ${b.room_number})</div>
+                        `;
+                        cell.appendChild(card);
+                    });
+
+                    // Highlight blocked slots
+                    if (blockedSlots.some(bs => bs.date === date && bs.time === time)) {
+                        cell.style.background = '#ffebee';
+                        cell.innerHTML += '<div style="font-size:0.7rem; color:#d9534f; text-align:center; margin-top:0.5rem; font-weight:bold;">BLOQUEADO</div>';
+                    }
+
+                    board.appendChild(cell);
+                });
+            });
+        }
+
+        loadMetrics();
+    </script>
+</body>
+</html>

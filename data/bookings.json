@@ -1,0 +1,63 @@
+[
+  {
+    "booking_id": "b1",
+    "room_number": "101",
+    "last_name": "Gomez",
+    "service_id": "m1",
+    "date": "2026-05-13",
+    "start_time": "09:00"
+  },
+  {
+    "booking_id": "b2",
+    "room_number": "102",
+    "last_name": "Perez",
+    "service_id": "m2",
+    "date": "2026-05-13",
+    "start_time": "09:30"
+  },
+  {
+    "booking_id": "b1778677236314",
+    "guest_name": "Silvia",
+    "room_number": "204",
+    "service_id": "m3",
+    "date": "2026-05-15",
+    "start_time": "18:30",
+    "duration": 45
+  },
+  {
+    "booking_id": "b1778688950960",
+    "guest_name": "Magali",
+    "room_number": "204",
+    "service_id": "m5",
+    "date": "2026-05-14",
+    "start_time": "17:00",
+    "duration": 45
+  },
+  {
+    "booking_id": "b1778709893986",
+    "guest_name": "Silvia",
+    "room_number": "101",
+    "service_id": "f5",
+    "date": "2026-05-14",
+    "start_time": "18:30",
+    "duration": 60
+  },
+  {
+    "booking_id": "b1778709940472",
+    "guest_name": "Fede",
+    "room_number": "204",
+    "service_id": "f9",
+    "date": "2026-05-14",
+    "start_time": "09:00",
+    "duration": 2
+  },
+  {
+    "booking_id": "b1778714535637",
+    "guest_name": "Fede",
+    "room_number": "204",
+    "service_id": "m2",
+    "date": "2026-05-22",
+    "start_time": "19:30",
+    "duration": 45
+  }
+]
