@@ -19,6 +19,12 @@ function validateBooking(date, startTime, durationMinutes, existingBookings, blo
     const start = new Date(`${date}T${startTime}:00`);
     const end = new Date(start.getTime() + durationMinutes * 60000);
 
+    // Don't allow bookings in the past or for the current time if it has already started
+    const now = new Date();
+    if (start <= now) {
+        return { available: false, message: "No se puede reservar un turno que ya ha comenzado o pasado." };
+    }
+
     const startHour = start.getHours();
     const startMinutes = start.getMinutes();
 
