@@ -199,6 +199,28 @@
             </div>
         </div>
 
+        <div class="block-slots-section" style="margin-top: 3rem;">
+            <h3>Bloquear Turnos</h3>
+            <div style="background: white; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: var(--border-radius); display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;">
+                <div class="form-group" style="margin: 0; flex: 1; min-width: 160px;">
+                    <label>Fecha</label>
+                    <input type="date" id="block-date" style="height: 48px; padding: 0 1rem; width: 100%;">
+                </div>
+                <div class="form-group" style="margin: 0; flex: 1; min-width: 140px;">
+                    <label>Horario</label>
+                    <select id="block-time" style="height: 48px; padding: 0 1rem; width: 100%; border-radius: var(--border-radius); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.9rem;">
+                        <option value="09:00">09:00 hs</option>
+                        <option value="10:00">10:00 hs</option>
+                        <option value="11:00">11:00 hs</option>
+                        <option value="12:00">12:00 hs</option>
+                        <option value="16:30">16:30 hs</option>
+                        <option value="17:30">17:30 hs</option>
+                        <option value="18:30">18:30 hs</option>
+                        <option value="19:30">19:30 hs</option>
+                    </select>
+                </div>
+                <button class="btn" style="height: 48px; width: auto; padding: 0 1.5rem; margin: 0; font-size: 0.8rem;" onclick="blockSlot()">Bloquear Turno</button>
+            </div>
             <div id="blocked-list" style="margin-top: 1rem;"></div>
         </div>
 
