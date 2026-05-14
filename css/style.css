@@ -301,3 +301,48 @@ input:focus {
     .logo { color: black; }
     h3 { page-break-after: avoid; }
 }
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    header > div {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 1.5rem !important;
+    }
+    header > div > div {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 1rem !important;
+    }
+    header > div > div > div {
+        margin-left: 0 !important;
+        border-left: none !important;
+        padding-left: 0 !important;
+    }
+    .filter-section {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+    .filter-section button, .filter-section input {
+        width: 100% !important;
+        margin-left: 0 !important;
+        margin-top: 0.5rem !important;
+    }
+    .kanban-controls {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem;
+    }
+    .kanban-controls > div {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    .kanban-controls input {
+        margin-left: 0 !important;
+        margin-top: 0.5rem;
+    }
+    .services-management-section .form-group {
+        grid-column: 1 / -1 !important;
+    }
+}

@@ -37,7 +37,8 @@ app.post('/api/bookings', async (req, res) => {
         room_number: req.body.room_number,
         service_id: req.body.service_id,
         date: req.body.date,
-        start_time: req.body.start_time
+        start_time: req.body.start_time,
+        duration: req.body.duration
     };
 
     const { data, error } = await supabase.from('bookings').insert([newBooking]).select();
@@ -96,6 +97,31 @@ app.delete('/api/blocked', async (req, res) => {
     const { error } = await supabase.from('blocked_slots').delete().eq('date', date).eq('time', time);
     if (error) return res.status(500).json({ error: error.message });
     res.json({ message: "Slot unblocked" });
+});
+
+// ─── SERVICES (CATALOG) ────────────────────────────────────────────────────────
+
+// Get all services
+app.get('/api/services', async (req, res) => {
+    const { data, error } = await supabase.from('services').select('*').order('category', { ascending: true });
+    if (error) return res.status(500).json({ error: error.message });
+    res.json(data);
+});
+
+// Create/Update service
+app.post('/api/services', async (req, res) => {
+    const service = req.body;
+    const { data, error } = await supabase.from('services').upsert([service]).select();
+    if (error) return res.status(500).json({ error: error.message });
+    res.status(201).json(data[0]);
+});
+
+// Delete service
+app.delete('/api/services/:id', async (req, res) => {
+    const { id } = req.params;
+    const { error } = await supabase.from('services').delete().eq('id', id);
+    if (error) return res.status(500).json({ error: error.message });
+    res.json({ message: "Service deleted" });
 });
 
 app.listen(PORT, '0.0.0.0', () => {
