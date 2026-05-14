@@ -91,7 +91,7 @@
 
 
         // Load services
-        fetch('/api/services')
+        fetch('data/services.json')
             .then(r => r.json())
             .then(data => {
                 servicesData = data;
@@ -126,24 +126,16 @@
             const container = document.getElementById('services-container');
             container.innerHTML = ''; // Clear previous
 
-            // Group by category
-            const categories = {};
-            servicesData.forEach(s => {
-                const cat = s.category || 'Otros';
-                if (!categories[cat]) categories[cat] = [];
-                categories[cat].push(s);
-            });
-
-            Object.entries(categories).forEach(([catName, services]) => {
+            servicesData.categories.forEach(cat => {
                 const h3 = document.createElement('h3');
-                h3.textContent = catName;
+                h3.textContent = cat.name;
                 h3.style.margin = "2rem 0 1rem 0";
                 h3.style.fontSize = "0.9rem";
                 h3.style.textTransform = "uppercase";
                 h3.style.color = "var(--accent-color)";
                 container.appendChild(h3);
 
-                services.forEach(s => {
+                cat.services.forEach(s => {
                     const card = document.createElement('div');
                     card.className = 'service-card';
                     card.style.display = 'flex';
@@ -151,7 +143,6 @@
                     card.style.gap = '1rem';
                     card.onclick = () => selectService(s);
                     card.innerHTML = `
-                        ${s.image_url ? `<img src="${s.image_url}" style="width: 70px; height: 70px; object-fit: cover; border-radius: 4px;">` : ''}
                         <div class="service-info" style="flex: 1">
                             <h3>${s.name}</h3>
                             <div class="service-meta">${s.duration || ''}${s.description ? '<br><small style="color:var(--secondary-color);font-size:0.7rem;line-height:1.4;display:block;margin-top:0.3rem;">' + s.description + '</small>' : ''}</div>
