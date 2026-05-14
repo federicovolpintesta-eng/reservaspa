@@ -33,7 +33,11 @@ app.get('/api/bookings', async (req, res) => {
 app.post('/api/bookings', async (req, res) => {
     const newBooking = {
         booking_id: 'b' + Date.now(),
-        ...req.body
+        guest_name: req.body.guest_name,
+        room_number: req.body.room_number,
+        service_id: req.body.service_id,
+        date: req.body.date,
+        start_time: req.body.start_time
     };
 
     const { data, error } = await supabase.from('bookings').insert([newBooking]).select();

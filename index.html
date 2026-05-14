@@ -181,7 +181,7 @@
                 
                 const isOccupied = !validation.available;
                 const isBlocked = blockedSlots.some(b => b.date === date && b.time === time);
-                const label = isBlocked ? 'Bloqueado' : (isOccupied ? 'Ocupado' : '1 disponible');
+                const label = (isBlocked || isOccupied) ? 'Ocupado' : '1 disponible';
                 
                 if (isOccupied || isBlocked) {
                     div.classList.add('disabled');
