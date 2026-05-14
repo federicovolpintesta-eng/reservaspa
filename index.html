@@ -70,6 +70,7 @@
             <div class="confirmation-card">
                 <div class="success-icon">✓</div>
                 <h2>Reserva Confirmada</h2>
+                <p style="color: var(--secondary-color); font-size: 0.9rem; margin-top: 0.5rem;">El comprobante se descargará automáticamente en unos segundos.</p>
                 <div id="confirmation-details" style="margin-top: 1.5rem; text-align: left; background: #fff; padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 4px;"></div>
                 
                 <button class="btn" onclick="downloadPDF()">Descargar Comprobante PDF</button>
@@ -250,7 +251,13 @@
                         ${packageNote}
                     `;
                     document.getElementById('confirmation-details').innerHTML = details;
+                    alert('¡Reserva generada correctamente!');
                     showSection('step-confirmation');
+                    
+                    // Auto-download PDF after 1 second
+                    setTimeout(() => {
+                        downloadPDF();
+                    }, 1000);
 
                     // Browser notification
                     if ('Notification' in window) {
