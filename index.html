@@ -178,7 +178,7 @@
                 const div = document.createElement('div');
                 div.className = 'time-slot';
                 
-                const duration = selectedService.duration_min || parseInt(selectedService.duration) || 45;
+                const duration = selectedService.durationMin || parseInt(selectedService.duration) || 45;
                 const validation = validateBooking(date, time, duration, currentBookings, blockedSlots);
                 
                 const isOccupied = !validation.available;
@@ -211,7 +211,7 @@
             if (!date || !selectedTime) return alert('Seleccione fecha y hora.');
 
             // Final validation
-            const validation = validateBooking(date, selectedTime, selectedService.duration_min || parseInt(selectedService.duration) || 45, currentBookings, blockedSlots);
+            const validation = validateBooking(date, selectedTime, selectedService.durationMin || parseInt(selectedService.duration) || 45, currentBookings, blockedSlots);
 
             if (!validation.available) {
                 document.getElementById('validation-msg').textContent = validation.message;
@@ -224,7 +224,7 @@
                 service_id: selectedService.id,
                 date: date,
                 start_time: selectedTime,
-                duration: selectedService.duration_min || parseInt(selectedService.duration) || 45
+                duration: selectedService.durationMin || parseInt(selectedService.duration) || 45
             };
 
             try {
@@ -251,7 +251,7 @@
                         ${packageNote}
                     `;
                     document.getElementById('confirmation-details').innerHTML = details;
-                    alert('¡Reserva generada correctamente!');
+                    alert('Reserva generada correctamente');
                     showSection('step-confirmation');
                     
                     // Auto-download PDF after 1 second
