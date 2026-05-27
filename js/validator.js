@@ -1,6 +1,6 @@
 /**
  * Validates if a requested slot is available based on capacity and business hours.
- * MAX 1 booking per time slot.
+ * MAX 2 bookings per time slot.
  *
  * @param {string} date - Date in YYYY-MM-DD format.
  * @param {string} startTime - Start time in HH:mm format.
@@ -36,7 +36,7 @@ function validateBooking(date, startTime, durationMinutes, existingBookings, blo
         return { available: false, message: "Horario fuera de atención. (09:00–13:00 / 16:30–20:30)" };
     }
 
-    // 2. Capacity Validation: MAX 1 per slot
+    // 2. Capacity Validation: MAX 2 per slot
     const concurrentBookings = existingBookings.filter(b => {
         if (b.date !== date) return false;
 
@@ -48,8 +48,8 @@ function validateBooking(date, startTime, durationMinutes, existingBookings, blo
         return (start < bEnd && end > bStart);
     });
 
-    if (concurrentBookings.length >= 1) {
-        return { available: false, message: "Turno ocupado. Solo se permite 1 reserva por horario." };
+    if (concurrentBookings.length >= 2) {
+        return { available: false, message: "Turno ocupado. Solo se permiten 2 reservas por horario." };
     }
 
     return { available: true, message: "Horario disponible." };

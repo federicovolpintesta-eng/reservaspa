@@ -183,7 +183,20 @@
                 
                 const isOccupied = !validation.available;
                 const isBlocked = blockedSlots.some(b => b.date === date && b.time === time);
-                const label = (isBlocked || isOccupied) ? 'Ocupado' : '1 disponible';
+                
+                // Calculate overlapping bookings to determine remaining capacity
+                const start = new Date(`${date}T${time}:00`);
+                const end = new Date(start.getTime() + duration * 60000);
+                const concurrentCount = currentBookings.filter(b => {
+                    if (b.date !== date) return false;
+                    const bStart = new Date(`${b.date}T${b.start_time}:00`);
+                    const bDuration = b.duration || 60;
+                    const bEnd = new Date(bStart.getTime() + bDuration * 60000);
+                    return (start < bEnd && end > bStart);
+                }).length;
+                
+                const availableSpots = Math.max(0, 2 - concurrentCount);
+                const label = (isBlocked || isOccupied) ? 'Ocupado' : `${availableSpots} disponible${availableSpots !== 1 ? 's' : ''}`;
                 
                 if (isOccupied || isBlocked) {
                     div.classList.add('disabled');

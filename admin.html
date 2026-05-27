@@ -461,7 +461,7 @@
             } else {
                 totalDays = [...new Set(rawBookings.map(b => b.date))].length || 1;
             }
-            const totalAvailableSlots = totalDays * 32;
+            const totalAvailableSlots = totalDays * 16;
             const occupancy = Math.round((bookings.length / totalAvailableSlots) * 100);
             document.getElementById('occupancy-rate').textContent = occupancy ? occupancy + '%' : '0%';
 
