@@ -19,10 +19,11 @@ function validateBooking(date, startTime, durationMinutes, existingBookings, blo
     const start = new Date(`${date}T${startTime}:00`);
     const end = new Date(start.getTime() + durationMinutes * 60000);
 
-    // Don't allow bookings in the past or for the current time if it has already started
+    // Don't allow bookings that are less than 1 hour in the future (must be at least 1 hour in advance)
     const now = new Date();
-    if (start <= now) {
-        return { available: false, message: "No se puede reservar un turno que ya ha comenzado o pasado." };
+    const oneHourInMs = 60 * 60 * 1000;
+    if (start.getTime() - now.getTime() < oneHourInMs) {
+        return { available: false, message: "Las reservas deben realizarse con al menos 1 hora de anticipación." };
     }
 
     const startHour = start.getHours();

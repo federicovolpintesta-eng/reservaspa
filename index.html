@@ -196,7 +196,19 @@
                 }).length;
                 
                 const availableSpots = Math.max(0, 2 - concurrentCount);
-                const label = (isBlocked || isOccupied) ? 'Ocupado' : `${availableSpots} disponible${availableSpots !== 1 ? 's' : ''}`;
+                
+                let label;
+                if (isBlocked) {
+                    label = 'Ocupado';
+                } else if (isOccupied) {
+                    if (validation.message.includes('anticipación')) {
+                        label = 'No disponible';
+                    } else {
+                        label = 'Ocupado';
+                    }
+                } else {
+                    label = `${availableSpots} disponible${availableSpots !== 1 ? 's' : ''}`;
+                }
                 
                 if (isOccupied || isBlocked) {
                     div.classList.add('disabled');
@@ -372,10 +384,27 @@
             doc.save(`Reserva_${guestInfo.name}_${selectedTime}.pdf`);
         }
 
-        // Set default date to tomorrow
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        document.getElementById('booking-date').value = tomorrow.toISOString().split('T')[0];
+        // Set default date dynamically (today if there are slots still available, otherwise tomorrow)
+        // Also set minimum date to today
+        const now = new Date();
+        const limitToday = new Date();
+        limitToday.setHours(18, 30, 0, 0); // last slot is 19:30, limit is 18:30 (1 hour before)
+        
+        const defaultDate = new Date();
+        if (now > limitToday) {
+            defaultDate.setDate(defaultDate.getDate() + 1);
+        }
+        
+        const yyyy = defaultDate.getFullYear();
+        const mm = String(defaultDate.getMonth() + 1).padStart(2, '0');
+        const dd = String(defaultDate.getDate()).padStart(2, '0');
+        document.getElementById('booking-date').value = `${yyyy}-${mm}-${dd}`;
+        
+        const today = new Date();
+        const tY = today.getFullYear();
+        const tM = String(today.getMonth() + 1).padStart(2, '0');
+        const tD = String(today.getDate()).padStart(2, '0');
+        document.getElementById('booking-date').min = `${tY}-${tM}-${tD}`;
     </script>
 </body>
 </html>
