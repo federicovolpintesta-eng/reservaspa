@@ -46,7 +46,6 @@
         { "id": "f7", "name": "Facial cleopatra — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 150000, "description": "2 Sesiones de Facial cleopatra" },
         { "id": "f8", "name": "Limpieza de cutis teens — 1 Sesión", "duration": "60'", "durationMin": 60, "price": 78000, "description": "Higiene Profunda + Extracción + Descongestión + Hidratación con luz led o ultrasonido" },
         { "id": "f9", "name": "Limpieza de cutis teens — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 130000, "description": "2 Sesiones de Limpieza de cutis teens" },
-        { "id": "f10", "name": "Facial sensitive — 1 Sesión", "duration": "60'", "durationMin": 60, "price": 68000, "description": "Higiene Profunda + Exfoliación enzimática + Inmunomodulación + Descongestión + Hidratación + Luz led o ultrasonido" },
         { "id": "f11", "name": "Facial sensitive — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 130000, "description": "2 Sesiones de Facial sensitive" }
       ]
     }
