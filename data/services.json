@@ -3,51 +3,51 @@
     {
       "name": "Spa Corporal",
       "services": [
-        { "id": "m1", "name": "Masaje Descontracturante", "duration": "45'", "durationMin": 45, "price": 60000, "description": "Deep Tissue Massage" },
-        { "id": "m2", "name": "Masaje Relajante", "duration": "45'", "durationMin": 45, "price": 60000, "description": "Relaxing Massage" },
-        { "id": "m3", "name": "Masaje Integrador", "duration": "45'", "durationMin": 45, "price": 65000, "description": "Mix de técnicas / Mix of Techniques" },
-        { "id": "m4", "name": "Relax Aromático", "duration": "45'", "durationMin": 45, "price": 65000, "description": "Aromatic Relax" },
-        { "id": "m5", "name": "Masaje con piedras", "duration": "45'", "durationMin": 45, "price": 65000, "description": "Hot Stone Massage" },
-        { "id": "m6", "name": "Descanso de piernas", "duration": "45'", "durationMin": 45, "price": 60000, "description": "Leg Relaxation" },
-        { "id": "m7", "name": "Localizado en cervical y espalda", "duration": "30'", "durationMin": 30, "price": 50000, "description": "Targeted Neck & Back Massage" },
-        { "id": "m8", "name": "Reflexología", "duration": "30'", "durationMin": 30, "price": 50000, "description": "Reflexology" },
-        { "id": "m9", "name": "Masaje terapéutico", "duration": "30'", "durationMin": 30, "price": 50000, "description": "Therapeutic Massage" },
-        { "id": "m10", "name": "Envoltura de fango termal", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Thermal Mud Wrap" },
-        { "id": "m11", "name": "Flotario", "duration": "45'", "durationMin": 45, "price": 50000, "description": "Float Therapy" },
-        { "id": "m12", "name": "Hidratación corporal", "duration": "45'", "durationMin": 45, "price": 70000, "description": "con algas micronizadas / Body Hydration (with Micronized Algae)" },
-        { "id": "m13", "name": "Pulido + Dry body brushing", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Body Scrub + Dry Body Brushing" },
-        { "id": "m14", "name": "Masaje express — Cabeza, cuello y rostro", "duration": "20'", "durationMin": 20, "price": 40000, "description": "Express Massage (Head + Neck + Face)" },
-        { "id": "m15", "name": "Masaje express — Energizante piernas", "duration": "20'", "durationMin": 20, "price": 40000, "description": "Express Massage (Energizing Legs)" }
+        { "id": "m1", "name": "Masaje Descontracturante", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Deep Tissue Massage" },
+        { "id": "m2", "name": "Masaje Relajante", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Relaxing Massage" },
+        { "id": "m3", "name": "Masaje Integrador", "duration": "45'", "durationMin": 45, "price": 75000, "description": "Mix de técnicas / Mix of Techniques" },
+        { "id": "m4", "name": "Relax Aromático", "duration": "45'", "durationMin": 45, "price": 75000, "description": "Aromatic Relax" },
+        { "id": "m5", "name": "Masaje con piedras", "duration": "45'", "durationMin": 45, "price": 75000, "description": "Hot Stone Massage" },
+        { "id": "m6", "name": "Descanso de piernas", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Leg Relaxation" },
+        { "id": "m7", "name": "Localizado en cervical y espalda", "duration": "30'", "durationMin": 30, "price": 60000, "description": "Targeted Neck & Back Massage" },
+        { "id": "m8", "name": "Reflexología", "duration": "30'", "durationMin": 30, "price": 60000, "description": "Reflexology" },
+        { "id": "m9", "name": "Masaje terapéutico", "duration": "30'", "durationMin": 30, "price": 60000, "description": "Therapeutic Massage" },
+        { "id": "m10", "name": "Envoltura de fango termal", "duration": "45'", "durationMin": 45, "price": 80000, "description": "Thermal Mud Wrap" },
+        { "id": "m11", "name": "Flotario", "duration": "45'", "durationMin": 45, "price": 60000, "description": "Float Therapy" },
+        { "id": "m12", "name": "Hidratación corporal", "duration": "45'", "durationMin": 45, "price": 80000, "description": "con algas micronizadas / Body Hydration (with Micronized Algae)" },
+        { "id": "m13", "name": "Pulido + Dry body brushing", "duration": "45'", "durationMin": 45, "price": 80000, "description": "Body Scrub + Dry Body Brushing" },
+        { "id": "m14", "name": "Masaje express — Cabeza, cuello y rostro", "duration": "20'", "durationMin": 20, "price": 50000, "description": "Express Massage (Head + Neck + Face)" },
+        { "id": "m15", "name": "Masaje express — Energizante piernas", "duration": "20'", "durationMin": 20, "price": 50000, "description": "Express Massage (Energizing Legs)" }
       ]
     },
     {
       "name": "Masajes Descontracturantes (Sesiones)",
       "services": [
-        { "id": "s1", "name": "Masaje Descontracturante — 3 Sesiones", "duration": "3 Sesiones", "durationMin": 45, "price": 170000, "description": "3 Sessions of Deep Tissue Massage" },
-        { "id": "s2", "name": "Masaje Descontracturante — 5 Sesiones", "duration": "5 Sesiones", "durationMin": 45, "price": 290000, "description": "5 Sessions of Deep Tissue Massage" }
+        { "id": "s1", "name": "Masaje Descontracturante — 3 Sesiones", "duration": "3 Sesiones", "durationMin": 45, "price": 190000, "description": "3 Sessions of Deep Tissue Massage" },
+        { "id": "s2", "name": "Masaje Descontracturante — 5 Sesiones", "duration": "5 Sesiones", "durationMin": 45, "price": 320000, "description": "5 Sessions of Deep Tissue Massage" }
       ]
     },
     {
       "name": "Paquetes (No se comparten)",
       "services": [
-        { "id": "p1", "name": "Antiestrés / Anti-Stress", "duration": "3 días", "durationMin": 45, "price": 170000, "description": "1° Día: masaje aromático 45' | 2° Día: masaje con piedras 45' | 3° Día: reflexología podal 30' + máscara facial de fango" },
-        { "id": "p2", "name": "Full relax", "duration": "3 días", "durationMin": 45, "price": 150000, "description": "1° día: descontracturante 45' | 2° día: cervical y espalda 30' | 3° día: reflexología podal 30'" },
-        { "id": "p3", "name": "Armonía spa", "duration": "3 días", "durationMin": 45, "price": 180000, "description": "1° día: masaje a elección 45' | 2° día: pulido + dry body brushing o hidratación con algas micronizadas | 3° día: aqua shock" }
+        { "id": "p1", "name": "Antiestrés / Anti-Stress", "duration": "3 días", "durationMin": 45, "price": 190000, "description": "1° Día: masaje aromático 45' | 2° Día: masaje con piedras 45' | 3° Día: reflexología podal 30' + máscara facial de fango" },
+        { "id": "p2", "name": "Full relax", "duration": "3 días", "durationMin": 45, "price": 170000, "description": "1° día: descontracturante 45' | 2° día: cervical y espalda 30' | 3° día: reflexología podal 30'" },
+        { "id": "p3", "name": "Armonía spa", "duration": "3 días", "durationMin": 45, "price": 210000, "description": "1° día: masaje a elección 45' | 2° día: pulido + dry body brushing o hidratación con algas micronizadas | 3° día: aqua shock" }
       ]
     },
     {
       "name": "Spa Facial",
       "services": [
-        { "id": "f1", "name": "Limpieza de cutis deluxe", "duration": "60'", "durationMin": 60, "price": 73000, "description": "Puntas de diamante o espátula ultrasónica + extracción + Descongestión + Hidratación" },
-        { "id": "f2", "name": "Limpieza de cutis doncella", "duration": "60'", "durationMin": 60, "price": 68000, "description": "Higiene profunda + Extracción + Descongestión + Hidratación con ultrasonido" },
-        { "id": "f3", "name": "Limpieza de cutis men", "duration": "60'", "durationMin": 60, "price": 68000, "description": "Higiene + Puntas de diamante + Extracción + Shock de hidratación" },
-        { "id": "f4", "name": "Aqua shock", "duration": "60'", "durationMin": 60, "price": 60000, "description": "Exfoliación + Shock Hídrico + Máscara con ácido hialurónico con ultrasonido" },
-        { "id": "f5", "name": "Limpieza de cutis sensitive", "duration": "60'", "durationMin": 60, "price": 65000, "description": "Higiene Profunda + Exfoliación + Inmunomodulación con luz led + Descongestión + Hidratación" },
-        { "id": "f7", "name": "Facial cleopatra — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 140000, "description": "2 Sesiones de Facial cleopatra" },
-        { "id": "f8", "name": "Limpieza de cutis teens — 1 Sesión", "duration": "60'", "durationMin": 60, "price": 68000, "description": "Higiene Profunda + Extracción + Descongestión + Hidratación con luz led o ultrasonido" },
-        { "id": "f9", "name": "Limpieza de cutis teens — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 120000, "description": "2 Sesiones de Limpieza de cutis teens" },
+        { "id": "f1", "name": "Limpieza de cutis deluxe", "duration": "60'", "durationMin": 60, "price": 80000, "description": "Puntas de diamante o espátula ultrasónica + extracción + Descongestión + Hidratación" },
+        { "id": "f2", "name": "Limpieza de cutis doncella", "duration": "60'", "durationMin": 60, "price": 78000, "description": "Higiene profunda + Extracción + Descongestión + Hidratación con ultrasonido" },
+        { "id": "f3", "name": "Limpieza de cutis men", "duration": "60'", "durationMin": 60, "price": 80000, "description": "Higiene + Puntas de diamante + Extracción + Shock de hidratación" },
+        { "id": "f4", "name": "Aqua shock", "duration": "60'", "durationMin": 60, "price": 70000, "description": "Exfoliación + Shock Hídrico + Máscara con ácido hialurónico con ultrasonido" },
+        { "id": "f5", "name": "Limpieza de cutis sensitive", "duration": "60'", "durationMin": 60, "price": 75000, "description": "Higiene Profunda + Exfoliación + Inmunomodulación con luz led + Descongestión + Hidratación" },
+        { "id": "f7", "name": "Facial cleopatra — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 150000, "description": "2 Sesiones de Facial cleopatra" },
+        { "id": "f8", "name": "Limpieza de cutis teens — 1 Sesión", "duration": "60'", "durationMin": 60, "price": 78000, "description": "Higiene Profunda + Extracción + Descongestión + Hidratación con luz led o ultrasonido" },
+        { "id": "f9", "name": "Limpieza de cutis teens — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 130000, "description": "2 Sesiones de Limpieza de cutis teens" },
         { "id": "f10", "name": "Facial sensitive — 1 Sesión", "duration": "60'", "durationMin": 60, "price": 68000, "description": "Higiene Profunda + Exfoliación enzimática + Inmunomodulación + Descongestión + Hidratación + Luz led o ultrasonido" },
-        { "id": "f11", "name": "Facial sensitive — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 120000, "description": "2 Sesiones de Facial sensitive" }
+        { "id": "f11", "name": "Facial sensitive — 2 Sesiones", "duration": "2 Sesiones", "durationMin": 60, "price": 130000, "description": "2 Sesiones de Facial sensitive" }
       ]
     }
   ]
