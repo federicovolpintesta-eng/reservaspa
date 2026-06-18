@@ -78,16 +78,21 @@ app.get('/api/blocked', async (req, res) => {
 
 // Block a slot
 app.post('/api/blocked', async (req, res) => {
-    const { date, time } = req.body;
+    const { date, time, blocked_count = 2 } = req.body;
     if (!date || !time) return res.status(400).json({ error: "date and time required" });
 
     // Check if exists
     const { data: existing } = await supabase.from('blocked_slots').select('*').eq('date', date).eq('time', time);
-    if (existing && existing.length > 0) return res.status(201).json({ message: "Slot already blocked", date, time });
-
-    const { error } = await supabase.from('blocked_slots').insert([{ date, time }]);
-    if (error) return res.status(500).json({ error: error.message });
-    res.status(201).json({ message: "Slot blocked", date, time });
+    
+    if (existing && existing.length > 0) {
+        const { error } = await supabase.from('blocked_slots').update({ blocked_count }).eq('date', date).eq('time', time);
+        if (error) return res.status(500).json({ error: error.message });
+        return res.status(200).json({ message: "Slot block updated", date, time, blocked_count });
+    } else {
+        const { error } = await supabase.from('blocked_slots').insert([{ date, time, blocked_count }]);
+        if (error) return res.status(500).json({ error: error.message });
+        return res.status(201).json({ message: "Slot blocked", date, time, blocked_count });
+    }
 });
 
 // Unblock a slot

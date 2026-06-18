@@ -219,6 +219,13 @@
                         <option value="19:30">19:30 hs</option>
                     </select>
                 </div>
+                <div class="form-group" style="margin: 0; flex: 1; min-width: 180px;">
+                    <label>Cantidad</label>
+                    <select id="block-count" style="height: 48px; padding: 0 1rem; width: 100%; border-radius: var(--border-radius); border: 1px solid var(--border-color); font-family: inherit; font-size: 0.9rem;">
+                        <option value="2">Turno Completo (2 masajes)</option>
+                        <option value="1">1 Masaje</option>
+                    </select>
+                </div>
                 <button class="btn" style="height: 48px; width: auto; padding: 0 1.5rem; margin: 0; font-size: 0.8rem;" onclick="blockSlot()">Bloquear Turno</button>
             </div>
             <div id="blocked-list" style="margin-top: 1rem;"></div>
@@ -337,12 +344,13 @@
         async function blockSlot() {
             const date = document.getElementById('block-date').value;
             const time = document.getElementById('block-time').value;
+            const count = document.getElementById('block-count').value;
             if (!date) return alert('Seleccione una fecha.');
 
             const res = await fetch('/api/blocked', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ date, time })
+                body: JSON.stringify({ date, time, blocked_count: parseInt(count, 10) })
             });
             if (res.ok) loadMetrics();
         }
@@ -398,8 +406,11 @@
                 ul.style.gap = '0.5rem';
                 blockedSlots.forEach(b => {
                     const tag = document.createElement('div');
-                    tag.style.cssText = 'background:#fff; border:1px solid #d9534f; padding:0.4rem 0.8rem; font-size:0.75rem; display:flex; gap:0.6rem; align-items:center;';
-                    tag.innerHTML = `<span style="color:#555">${b.date} — ${b.time} hs</span><button onclick="unblockSlot('${b.date}','${b.time}')" style="background:none;border:none;color:#d9534f;cursor:pointer;font-size:0.9rem;padding:0;">✕</button>`;
+                    const isPartial = b.blocked_count === 1;
+                    const borderColor = isPartial ? '#f0ad4e' : '#d9534f';
+                    const textLabel = isPartial ? '(1 Masaje)' : '(Completo)';
+                    tag.style.cssText = `background:#fff; border:1px solid ${borderColor}; padding:0.4rem 0.8rem; font-size:0.75rem; display:flex; gap:0.6rem; align-items:center;`;
+                    tag.innerHTML = `<span style="color:#555">${b.date} — ${b.time} hs <strong style="color:${borderColor}">${textLabel}</strong></span><button onclick="unblockSlot('${b.date}','${b.time}')" style="background:none;border:none;color:${borderColor};cursor:pointer;font-size:0.9rem;padding:0;">✕</button>`;
                     ul.appendChild(tag);
                 });
                 blockedList.appendChild(ul);
@@ -531,9 +542,15 @@
                     });
 
                     // Highlight blocked slots
-                    if (blockedSlots.some(bs => bs.date === date && bs.time === time)) {
-                        cell.style.background = '#ffebee';
-                        cell.innerHTML += '<div style="font-size:0.7rem; color:#d9534f; text-align:center; margin-top:0.5rem; font-weight:bold;">BLOQUEADO</div>';
+                    const blockedSlot = blockedSlots.find(bs => bs.date === date && bs.time === time);
+                    if (blockedSlot) {
+                        if (blockedSlot.blocked_count === 1) {
+                            cell.style.background = '#fcf8e3';
+                            cell.innerHTML += '<div style="font-size:0.7rem; color:#f0ad4e; text-align:center; margin-top:0.5rem; font-weight:bold;">1 BLOQUEADO</div>';
+                        } else {
+                            cell.style.background = '#ffebee';
+                            cell.innerHTML += '<div style="font-size:0.7rem; color:#d9534f; text-align:center; margin-top:0.5rem; font-weight:bold;">BLOQUEADO COMPLETO</div>';
+                        }
                     }
 
                     board.appendChild(cell);
