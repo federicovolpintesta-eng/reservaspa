@@ -11,8 +11,10 @@
  */
 function validateBooking(date, startTime, durationMinutes, existingBookings, blockedSlots = []) {
     // 0. Check if slot is manually blocked
-    const isBlocked = blockedSlots.some(b => b.date === date && b.time === startTime);
-    if (isBlocked) {
+    const blockedSlot = blockedSlots.find(b => b.date === date && b.time === startTime);
+    const blockedCount = blockedSlot ? (blockedSlot.blocked_count || 2) : 0;
+    
+    if (blockedCount >= 2) {
         return { available: false, message: "Este turno está bloqueado por administración." };
     }
 
@@ -49,8 +51,8 @@ function validateBooking(date, startTime, durationMinutes, existingBookings, blo
         return (start < bEnd && end > bStart);
     });
 
-    if (concurrentBookings.length >= 2) {
-        return { available: false, message: "Turno ocupado. Solo se permiten 2 reservas por horario." };
+    if (concurrentBookings.length >= (2 - blockedCount)) {
+        return { available: false, message: "Turno ocupado. No hay más cupos disponibles." };
     }
 
     return { available: true, message: "Horario disponible." };

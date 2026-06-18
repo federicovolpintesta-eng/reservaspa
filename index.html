@@ -182,7 +182,10 @@
                 const validation = validateBooking(date, time, duration, currentBookings, blockedSlots);
                 
                 const isOccupied = !validation.available;
-                const isBlocked = blockedSlots.some(b => b.date === date && b.time === time);
+                
+                const blockedSlot = blockedSlots.find(b => b.date === date && b.time === time);
+                const blockedCount = blockedSlot ? (blockedSlot.blocked_count || 2) : 0;
+                const isFullyBlocked = blockedCount >= 2;
                 
                 // Calculate overlapping bookings to determine remaining capacity
                 const start = new Date(`${date}T${time}:00`);
@@ -195,10 +198,10 @@
                     return (start < bEnd && end > bStart);
                 }).length;
                 
-                const availableSpots = Math.max(0, 2 - concurrentCount);
+                const availableSpots = Math.max(0, 2 - concurrentCount - blockedCount);
                 
                 let label;
-                if (isBlocked) {
+                if (isFullyBlocked) {
                     label = 'Ocupado';
                 } else if (isOccupied) {
                     if (validation.message.includes('anticipación')) {
@@ -210,7 +213,7 @@
                     label = `${availableSpots} disponible${availableSpots !== 1 ? 's' : ''}`;
                 }
                 
-                if (isOccupied || isBlocked) {
+                if (isOccupied || isFullyBlocked) {
                     div.classList.add('disabled');
                 } else {
                     div.onclick = () => {
