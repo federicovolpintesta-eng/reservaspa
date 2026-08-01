@@ -3,9 +3,9 @@
     {
       "name": "Spa Corporal",
       "services": [
-        { "id": "m1", "name": "Masaje Descontracturante", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Deep Tissue Massage" },
-        { "id": "m2", "name": "Masaje Relajante", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Relaxing Massage" },
-        { "id": "m3", "name": "Masaje Integrador", "duration": "45'", "durationMin": 45, "price": 75000, "description": "Mix de técnicas / Mix of Techniques" },
+        { "id": "m1", "name": "Masaje Descontracturante", "duration": "45'", "durationMin": 45, "price": 80000, "description": "Deep Tissue Massage" },
+        { "id": "m2", "name": "Masaje Relajante", "duration": "45'", "durationMin": 45, "price": 80000, "description": "Relaxing Massage" },
+        { "id": "m3", "name": "Masaje Integrador", "duration": "45'", "durationMin": 45, "price": 85000, "description": "Mix de técnicas / Mix of Techniques" },
         { "id": "m4", "name": "Relax Aromático", "duration": "45'", "durationMin": 45, "price": 75000, "description": "Aromatic Relax" },
         { "id": "m5", "name": "Masaje con piedras", "duration": "45'", "durationMin": 45, "price": 75000, "description": "Hot Stone Massage" },
         { "id": "m6", "name": "Descanso de piernas", "duration": "45'", "durationMin": 45, "price": 70000, "description": "Leg Relaxation" },
@@ -38,8 +38,8 @@
     {
       "name": "Spa Facial",
       "services": [
-        { "id": "f1", "name": "Limpieza de cutis deluxe", "duration": "60'", "durationMin": 60, "price": 80000, "description": "Puntas de diamante o espátula ultrasónica + extracción + Descongestión + Hidratación" },
-        { "id": "f2", "name": "Limpieza de cutis doncella", "duration": "60'", "durationMin": 60, "price": 78000, "description": "Higiene profunda + Extracción + Descongestión + Hidratación con ultrasonido" },
+        { "id": "f1", "name": "Limpieza de cutis deluxe", "duration": "60'", "durationMin": 60, "price": 85000, "description": "Puntas de diamante o espátula ultrasónica + extracción + Descongestión + Hidratación" },
+        { "id": "f2", "name": "Limpieza de cutis doncella", "duration": "60'", "durationMin": 60, "price": 80000, "description": "Higiene profunda + Extracción + Descongestión + Hidratación con ultrasonido" },
         { "id": "f3", "name": "Limpieza de cutis men", "duration": "60'", "durationMin": 60, "price": 80000, "description": "Higiene + Puntas de diamante + Extracción + Shock de hidratación" },
         { "id": "f4", "name": "Aqua shock", "duration": "60'", "durationMin": 60, "price": 70000, "description": "Exfoliación + Shock Hídrico + Máscara con ácido hialurónico con ultrasonido" },
         { "id": "f5", "name": "Limpieza de cutis sensitive", "duration": "60'", "durationMin": 60, "price": 75000, "description": "Higiene Profunda + Exfoliación + Inmunomodulación con luz led + Descongestión + Hidratación" },
